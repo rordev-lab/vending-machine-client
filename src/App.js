@@ -10,7 +10,6 @@ import {
   Register,
   Login,
   Profile,
-  NotFoundPage,
 } from './components';
 import { showSuccess } from './utils/toast';
 
@@ -49,7 +48,6 @@ const App = (props) => {
           <Route path='/register' component={Register} />
           <Route path='/login' component={Login} />
           <PrivateRoute exact path='/profile' component={Profile} />{' '}
-          <Route component={NotFoundPage} />
         </Switch>
       </main>
       <Footer />

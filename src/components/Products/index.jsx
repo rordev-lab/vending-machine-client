@@ -120,14 +120,19 @@ const Product = (props) => {
     }
   };
 
+  const onBuyProduct = (id, amount_available) => {
+    console.log('id', id, amount_available);
+  };
+
   return (
     <>
       <ProductCardList
         {...props}
-        onAddProduct={onAddProduct}
         products={products}
-        onDeleteProduct={onDeleteProduct}
+        onAddProduct={onAddProduct}
+        onBuyProduct={onBuyProduct}
         onEditProduct={onEditProduct}
+        onDeleteProduct={onDeleteProduct}
       />
       <AddEditProductForm
         isShowModel={isShowModel}

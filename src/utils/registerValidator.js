@@ -15,7 +15,6 @@ const registerValidator = (
   confirmPassword,
   role
 ) => {
-  console.log('role', role);
   if (username.length < 3 || username.trim() === '') {
     showError('Username must be at least 3 characters long');
     return false;

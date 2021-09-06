@@ -5,6 +5,7 @@ import {
   resetDeposits,
   deleteAccount,
   updateProfile,
+  updateDeposits,
 } from '../../Services';
 import { profileValidationFunc } from '../../utils/formValidator';
 import { confirmBox, showError, showSuccess } from '../../utils/toast';
@@ -15,10 +16,22 @@ const initialStates = {
   email: '',
 };
 
+const coinsInitialStates = {
+  cent5: '',
+  cent10: '',
+  cent20: '',
+  cent50: '',
+  cent100: '',
+};
+
 const Profile = (props) => {
   // states
   const [inputs, setInputs] = useState(initialStates);
   const [isEdit, setIsEdit] = useState(false);
+
+  const [isDepositEdit, setIsDepositEdit] = useState(false);
+
+  const [coinInputs, setCoinInputs] = useState(coinsInitialStates);
 
   useEffect(() => {
     getProfileData();
@@ -31,10 +44,14 @@ const Profile = (props) => {
       email: result.email,
       username: result.username,
     });
+    if (result.deposit && JSON.parse(result.deposit)) {
+      const deposit = JSON.parse(result.deposit);
+      setCoinInputs(deposit);
+    }
   };
 
   // function to manage input states
-  const onChange = (e) => {
+  const onInputChange = (e) => {
     const {
       target: { name, value },
     } = e;
@@ -44,8 +61,22 @@ const Profile = (props) => {
     });
   };
 
+  // function to manage input states
+  const onCoinInputChange = (e) => {
+    const {
+      target: { name, value },
+    } = e;
+    setCoinInputs({
+      ...coinInputs,
+      [name]: value,
+    });
+  };
+
   // function to manage add profile toggle
   const onEditProfile = () => setIsEdit(!isEdit);
+
+  // function to manage edit deposit toggle
+  const onEditDeposit = () => setIsDepositEdit(!isDepositEdit);
 
   // function to update profile
   const onSubmit = async (e) => {
@@ -84,6 +115,7 @@ const Profile = (props) => {
     }
   };
 
+  // function to reset deposit
   const onReset = async () => {
     const { value } = await confirmBox({
       title: 'Are you sure?',
@@ -94,19 +126,50 @@ const Profile = (props) => {
     } else {
       await resetDeposits();
       showSuccess('Deposit reset successfully');
+      setCoinInputs(coinsInitialStates);
     }
+  };
+
+  // function to manage add/edit deposit form submit
+  const onDepositSubmit = async (e) => {
+    e.preventDefault();
+    const result = await updateDeposits({
+      deposit: JSON.stringify(coinInputs),
+    });
+    if (result.status === 200) {
+      showSuccess('Deposit updated successfully');
+      onEditDeposit();
+    }
+  };
+
+  // function to get balance
+  const getBalance = () => {
+    var balance = 0;
+    const cent5 = coinInputs.cent5 ? coinInputs.cent5 * 5 : 0;
+    const cent10 = coinInputs.cent10 ? coinInputs.cent10 * 10 : 0;
+    const cent20 = coinInputs.cent20 ? coinInputs.cent20 * 20 : 0;
+    const cent50 = coinInputs.cent50 ? coinInputs.cent50 * 50 : 0;
+    const cent100 = coinInputs.cent100 ? coinInputs.cent100 * 100 : 0;
+    balance = cent5 + cent10 + cent20 + cent50 + cent100;
+    return balance.toFixed(2);
   };
 
   return (
     <div className='container'>
       <ProfileForm
         isEdit={isEdit}
-        onSubmit={onSubmit}
-        onChange={onChange}
         inputs={inputs}
         onReset={onReset}
+        onSubmit={onSubmit}
+        coinInputs={coinInputs}
+        getBalance={getBalance}
+        isDepositEdit={isDepositEdit}
+        onInputChange={onInputChange}
         onEditProfile={onEditProfile}
+        onEditDeposit={onEditDeposit}
+        onDepositSubmit={onDepositSubmit}
         onDeleteAccount={onDeleteAccount}
+        onCoinInputChange={onCoinInputChange}
       />
     </div>
   );

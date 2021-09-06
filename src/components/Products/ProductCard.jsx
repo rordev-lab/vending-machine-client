@@ -1,7 +1,11 @@
-import { faPencilAlt, faTrash } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  faPencilAlt,
+  faShoppingCart,
+  faTrash,
+} from '@fortawesome/free-solid-svg-icons';
+
 import { isSellerUser } from '../../utils/auth';
 
 const ProductCard = (props) => {
@@ -13,6 +17,7 @@ const ProductCard = (props) => {
     seller_id = '',
     onEditProduct,
     onDeleteProduct,
+    onBuyProduct,
   } = props;
 
   let footer;
@@ -51,13 +56,12 @@ const ProductCard = (props) => {
     footer = (
       <div className='card-footer'>
         <small className='text-muted'> - $ {cost} </small>{' '}
-        <Link
-          to={`/details/${id}`}
-          type='button'
-          className='btn btn-primary float-right btn-sm'
+        <button
+          className='btn btn-primary btn-sm float-right'
+          onClick={(e) => onBuyProduct(id, amount_available)}
         >
-          Buy
-        </Link>
+          <FontAwesomeIcon icon={faShoppingCart} /> Buy
+        </button>
       </div>
     );
   }
@@ -65,7 +69,7 @@ const ProductCard = (props) => {
   return (
     <div className='card col-4'>
       <div className='card-body'>
-        <h5 className='card-title'>{product_name}</h5>
+        <h5 className='card-title text-capitalize'>{product_name}</h5>
         <small className='text-muted '>Available - {amount_available} </small>
       </div>
       {footer}

@@ -11,6 +11,7 @@ const Input = (props) => {
     valid,
     invalidMessage,
     readOnly = false,
+    nonValid = false,
   } = props;
   let className = 'form-control';
   if (value !== '') {
@@ -19,6 +20,10 @@ const Input = (props) => {
     } else {
       className = 'form-control is-invalid';
     }
+  }
+
+  if (nonValid) {
+    className = 'form-control';
   }
 
   return (

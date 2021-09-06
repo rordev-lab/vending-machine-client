@@ -48,8 +48,8 @@ const Login = (props) => {
     const { email, password } = inputs;
     if (!loginValidator(email, password)) return;
     const { data, headers } = await login(inputs);
-    console.log('sss', data);
-    if (data && !data.success) {
+    console.log(data);
+    if (data && !data.data && !data.success) {
       showError(data.errors[0]);
     } else {
       if (data.data) {

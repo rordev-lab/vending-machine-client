@@ -7,16 +7,28 @@ import Input from '../Common/Input';
 import { isSellerUser } from '../../utils/auth';
 
 const ProfileForm = ({
-  onChange,
-  onSubmit,
   inputs,
   isEdit,
   onReset,
+  onSubmit,
+  coinInputs,
+  getBalance,
   onEditProfile,
+  isDepositEdit,
+  onEditDeposit,
+  onInputChange,
+  onDepositSubmit,
   onDeleteAccount,
+  onCoinInputChange,
 }) => {
   const { username, email } = inputs;
-
+  const {
+    cent5 = '',
+    cent10 = '',
+    cent20 = '',
+    cent50 = '',
+    cent100 = '',
+  } = coinInputs;
   let validObj = profileValidationFunc(username, email);
 
   return (
@@ -27,7 +39,7 @@ const ProfileForm = ({
         </div>
         <div className='col-md-10'>
           <button
-            className='btn btn-danger btn-sm float-right'
+            className='btn btn-info btn-sm float-right'
             onClick={() => onEditProfile()}
           >
             <FontAwesomeIcon icon={faEdit} /> Edit Profile
@@ -43,7 +55,7 @@ const ProfileForm = ({
               label='User name'
               placeholder='Enter username'
               value={username}
-              onChange={onChange}
+              onChange={onInputChange}
               readOnly={isEdit ? false : true}
               valid={validObj.validUsername}
             />
@@ -54,98 +66,10 @@ const ProfileForm = ({
               label='email'
               placeholder='Enter email'
               value={email}
-              onChange={onChange}
+              onChange={onInputChange}
               valid={validObj.validEmail}
             />
           </div>{' '}
-          {!isSellerUser() ? (
-            <>
-              <div className='col-md-12'>
-                <p className='mt-2'>
-                  <b>Balance is .00</b>
-                </p>
-                <p className='mt-2'>
-                  <div className='d-flex'>
-                    <span>
-                      <b>Deposits :- </b>
-                    </span>
-                    {!isEdit ? (
-                      <>
-                        <span>
-                          <button
-                            className='btn btn-info btn-sm'
-                            onClick={() => onReset()}
-                          >
-                            <FontAwesomeIcon icon={faSync} />
-                          </button>
-                        </span>
-                      </>
-                    ) : null}
-                  </div>
-                </p>
-              </div>
-              <div className='col-md-6'>
-                <Input
-                  type='number'
-                  name='username'
-                  label='5 cent coins'
-                  placeholder='Enter cent'
-                  value={username}
-                  onChange={onChange}
-                  readOnly={isEdit ? false : true}
-                  valid={validObj.validUsername}
-                />
-              </div>
-              <div className='col-md-6'>
-                <Input
-                  type='number'
-                  name='username'
-                  label='10 cent coins'
-                  placeholder='Enter cent'
-                  value={username}
-                  onChange={onChange}
-                  readOnly={isEdit ? false : true}
-                  valid={validObj.validUsername}
-                />
-              </div>
-              <div className='col-md-6'>
-                <Input
-                  type='number'
-                  name='username'
-                  label='20 cent coins'
-                  placeholder='Enter cent'
-                  value={username}
-                  onChange={onChange}
-                  readOnly={isEdit ? false : true}
-                  valid={validObj.validUsername}
-                />
-              </div>
-              <div className='col-md-6'>
-                <Input
-                  type='number'
-                  name='username'
-                  label='50 cent coins'
-                  placeholder='Enter cent'
-                  value={username}
-                  onChange={onChange}
-                  readOnly={isEdit ? false : true}
-                  valid={validObj.validUsername}
-                />
-              </div>{' '}
-              <div className='col-md-6'>
-                <Input
-                  type='number'
-                  name='username'
-                  label='100 cent coins'
-                  placeholder='Enter cent'
-                  value={username}
-                  onChange={onChange}
-                  readOnly={isEdit ? false : true}
-                  valid={validObj.validUsername}
-                />
-              </div>
-            </>
-          ) : null}
           {isEdit ? (
             <div className='col-md-12'>
               <input
@@ -164,6 +88,123 @@ const ProfileForm = ({
         </div>
       </form>
 
+      <form onSubmit={onDepositSubmit}>
+        <div className='row space-top'>
+          {!isSellerUser() ? (
+            <>
+              <div className='col-md-12'>
+                <p className='mt-2'>
+                  <b>Balance is {getBalance()}</b>
+                </p>
+                <p className='mt-2'>
+                  <div className='d-flex'>
+                    <span>
+                      <b>Deposits :- </b>
+                    </span>
+                    {!isDepositEdit ? (
+                      <>
+                        <span>
+                          <button
+                            type='button'
+                            className='btn btn-info btn-sm'
+                            onClick={() => onReset()}
+                          >
+                            <FontAwesomeIcon icon={faSync} />
+                          </button>
+                        </span>
+                        <span>
+                          <button
+                            type='button'
+                            className='btn btn-info btn-sm'
+                            onClick={() => onEditDeposit()}
+                          >
+                            <FontAwesomeIcon icon={faEdit} />
+                          </button>
+                        </span>
+                      </>
+                    ) : null}
+                  </div>
+                </p>
+              </div>
+              <div className='col-md-6'>
+                <Input
+                  type='number'
+                  name='cent5'
+                  label='5 cent coins'
+                  placeholder='Enter cent'
+                  value={cent5}
+                  onChange={onCoinInputChange}
+                  readOnly={isDepositEdit ? false : true}
+                  nonValid={true}
+                />
+              </div>
+              <div className='col-md-6'>
+                <Input
+                  type='number'
+                  name='cent10'
+                  label='10 cent coins'
+                  placeholder='Enter cent'
+                  value={cent10}
+                  onChange={onCoinInputChange}
+                  readOnly={isDepositEdit ? false : true}
+                  nonValid={true}
+                />
+              </div>
+              <div className='col-md-6'>
+                <Input
+                  type='number'
+                  name='cent20'
+                  label='20 cent coins'
+                  placeholder='Enter cent'
+                  value={cent20}
+                  onChange={onCoinInputChange}
+                  readOnly={isDepositEdit ? false : true}
+                  nonValid={true}
+                />
+              </div>
+              <div className='col-md-6'>
+                <Input
+                  type='number'
+                  name='cent50'
+                  label='50 cent coins'
+                  placeholder='Enter cent'
+                  value={cent50}
+                  onChange={onCoinInputChange}
+                  readOnly={isDepositEdit ? false : true}
+                  nonValid={true}
+                />
+              </div>{' '}
+              <div className='col-md-6'>
+                <Input
+                  type='number'
+                  name='cent100'
+                  label='100 cent coins'
+                  placeholder='Enter cent'
+                  value={cent100}
+                  onChange={onCoinInputChange}
+                  readOnly={isDepositEdit ? false : true}
+                  nonValid={true}
+                />
+              </div>
+            </>
+          ) : null}
+          {isDepositEdit ? (
+            <div className='col-md-12'>
+              <input
+                type='submit'
+                className='btn btn-primary mt-3'
+                value='Update'
+              />
+              <input
+                type='button'
+                className='btn btn-primary mt-3'
+                value='Cancel'
+                onClick={() => onEditDeposit()}
+              />
+            </div>
+          ) : null}
+        </div>
+      </form>
       <div>
         <button
           className='btn btn-danger btn-sm float-right'

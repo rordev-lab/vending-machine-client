@@ -3,6 +3,7 @@ import ProductCard from './ProductCard';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import { isSellerUser } from '../../utils/auth';
 
 const ProductCardList = (props) => {
   const { onAddProduct, products } = props;
@@ -35,12 +36,14 @@ const ProductCardList = (props) => {
     <div className='row space-top'>
       <div className='col-md-12'>
         <h1 className='jumbotron-heading text-center'>Products</h1>
-        <button
-          className='btn btn-info btn-sm float-right'
-          onClick={(e) => onAddProduct()}
-        >
-          <FontAwesomeIcon icon={faPlus} /> Add Product
-        </button>
+        {isSellerUser() ? (
+          <button
+            className='btn btn-info btn-sm float-right'
+            onClick={(e) => onAddProduct()}
+          >
+            <FontAwesomeIcon icon={faPlus} /> Add Product
+          </button>
+        ) : null}
       </div>
       {productCardList}
     </div>
