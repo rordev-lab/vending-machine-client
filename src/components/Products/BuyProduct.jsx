@@ -49,13 +49,56 @@ const BuyProductForm = (props) => {
             </p>
             <p>
               <span className='font-weight-bold lead text-primary'>
-                Balance:
+                Change:
               </span>{' '}
-              <span className='ml-2 lead'>{orderData.balance}</span>
             </p>
-            <div>
+            <p className='d-flex justify-content-evenly'>
+              <div>
+                <span className='font-weight-bold lead text-muted'>
+                  Cent 5:
+                </span>{' '}
+                <span className='ml-2 lead'>
+                  {orderData.balance.cent5 ? orderData.balance.cent5 : 0}
+                </span>
+              </div>
+              <div>
+                <span className='font-weight-bold lead text-muted'>
+                  Cent 10:
+                </span>{' '}
+                <span className='ml-2 lead'>
+                  {orderData.balance.cent10 ? orderData.balance.cent10 : 0}
+                </span>
+              </div>{' '}
+            </p>{' '}
+            <p className='d-flex justify-content-evenly'>
+              <div>
+                <span className='font-weight-bold lead text-muted'>
+                  Cent 20:
+                </span>{' '}
+                <span className='ml-2 lead'>
+                  {orderData.balance.cent20 ? orderData.balance.cent20 : 0}
+                </span>
+              </div>
+              <div>
+                <span className='font-weight-bold lead text-muted'>
+                  Cent 50:
+                </span>{' '}
+                <span className='ml-2 lead'>
+                  {orderData.balance.cent50 ? orderData.balance.cent50 : 0}
+                </span>
+              </div>
+            </p>{' '}
+            <p className='d-flex justify-content-center'>
+              <span className='font-weight-bold lead text-muted'>
+                Cent 100:
+              </span>{' '}
+              <span className='ml-2 lead'>
+                {orderData.balance.cent100 ? orderData.balance.cent100 : 0}
+              </span>
+            </p>
+            <div className='con-purchase-btn'>
               <button
-                className='btn btn-primary btn-sm con-purchase-btn'
+                className='btn btn-primary btn-sm '
                 onClick={() => onBuyModalClose()}
               >
                 Continue Purchase
