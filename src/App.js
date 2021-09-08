@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Route, Switch, withRouter } from 'react-router-dom';
 
-import PrivateRoute from './Routes/PrivateRoute';
+import PrivateRoute from './routes/PrivateRoute';
 import { isUserAuthenticated } from './utils/auth';
 import {
   Header,
@@ -22,11 +22,7 @@ const App = (props) => {
     } // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isUserAuthenticated()]);
 
-  /*
-----------------------------
-  Function to manage logout
-----------------------------
- */
+  //  Function to manage logout
   const onLogOut = () => {
     setLoggedIn(false);
     showSuccess('Logout successful');

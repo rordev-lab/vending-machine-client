@@ -109,3 +109,8 @@ body {
 .float-right {
   float: right;
 }
+
+.con-purchase-btn {
+  display: flex;
+  margin: 0 auto;
+}

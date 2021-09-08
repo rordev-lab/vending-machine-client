@@ -1,8 +1,8 @@
 import React from 'react';
-import ProductCard from './ProductCard';
-
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
+
+import ProductCard from './ProductCard';
 import { isSellerUser } from '../../utils/auth';
 
 const ProductCardList = (props) => {

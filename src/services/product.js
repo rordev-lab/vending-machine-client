@@ -53,6 +53,6 @@ const deleteProduct = async (id) => {
   return await axios
     .delete(`${process.env.REACT_APP_SERVER_URL}/products/${id}`, options)
     .then((response) => response)
-    .catch((error) => console.log('error in register api', error));
+    .catch((error) => console.log('error in delete product api', error));
 };
 export { fetchProducts, addProduct, updateProduct, deleteProduct };

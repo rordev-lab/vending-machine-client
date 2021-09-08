@@ -5,11 +5,12 @@ import {
   fetchProducts,
   updateProduct,
   deleteProduct,
-} from '../../Services';
+  buyProduct,
+} from '../../services';
 import { productValidationFunc } from '../../utils/formValidator';
 import { confirmBox, showError, showSuccess } from '../../utils/toast';
-
 import AddEditProductForm from './AddEditProduct';
+import BuyProductForm from './BuyProduct';
 import ProductCardList from './ProductCardList';
 
 const initialStates = {
@@ -19,12 +20,29 @@ const initialStates = {
   id: '',
 };
 
+const purchaseInputInitialStates = {
+  id: '',
+  purchaseQuantity: 1,
+  amountAvailable: 0,
+};
+
+const orderDataInitialStates = {
+  totalSpend: '',
+  products: {},
+  balance: '',
+  purchaseQuantity: '',
+};
 const Product = (props) => {
   // States
   const [isShowModel, setIsShowModel] = useState(false);
+  const [isBuyModel, setIsBuyModel] = useState(false);
   const [inputs, setInputs] = useState(initialStates);
   const [products, setProducts] = useState([]);
-
+  const [purchaseInput, setPurchaseInput] = useState(
+    purchaseInputInitialStates
+  );
+  const [isOrder, setIsOrder] = useState(false);
+  const [orderData, setOrderData] = useState({});
   useEffect(() => {
     getProducts();
   }, []);
@@ -77,7 +95,7 @@ const Product = (props) => {
         const { statusText } = await addProduct(payload);
         if (statusText === 'Created') {
           showSuccess('Product added successfully');
-          await onModalClose();
+          onModalClose();
           await getProducts();
         }
       }
@@ -120,8 +138,67 @@ const Product = (props) => {
     }
   };
 
+  // function to buy product
   const onBuyProduct = (id, amount_available) => {
-    console.log('id', id, amount_available);
+    setPurchaseInput({
+      id,
+      purchaseQuantity: 1,
+      amountAvailable: amount_available,
+    });
+    setIsBuyModel(true);
+  };
+
+  // function to close buy modal
+  const onBuyModalClose = (e) => {
+    setPurchaseInput(purchaseInputInitialStates);
+    setIsBuyModel(false);
+    setIsOrder(false);
+    setOrderData(orderDataInitialStates);
+  };
+
+  // function to get balance
+  const getBalance = (changeCents) => {
+    var balance = 0;
+    if (changeCents) {
+      const cent5 =
+        changeCents && changeCents.cent5 ? changeCents.cent5 * 5 : 0;
+      const cent10 =
+        changeCents && changeCents.cent10 ? changeCents.cent10 * 10 : 0;
+      const cent20 =
+        changeCents && changeCents.cent20 ? changeCents.cent20 * 20 : 0;
+      const cent50 =
+        changeCents && changeCents.cent50 ? changeCents.cent50 * 50 : 0;
+      const cent100 =
+        changeCents && changeCents.cent100 ? changeCents.cent100 * 100 : 0;
+      balance = cent5 + cent10 + cent20 + cent50 + cent100;
+    }
+    return balance.toFixed(2);
+  };
+
+  // function to pay product
+  const onPaySubmit = async (e) => {
+    e.preventDefault();
+    if (purchaseInput.amountAvailable < purchaseInput.purchaseQuantity)
+      return window.alert('More than available quantity not allowed');
+    else {
+      const data = {
+        product_id: purchaseInput.id,
+        quantity: purchaseInput.purchaseQuantity,
+      };
+      const result = await buyProduct(data);
+      if (result.status === 'unprocessable_entity') showError(result.error);
+      if (result.status === 'ok') {
+        const balance = getBalance(result.change);
+        setOrderData({
+          totalSpend: result.total_spend.toFixed(2),
+          products: result.products,
+          balance,
+          purchaseQuantity: purchaseInput.purchaseQuantity,
+        });
+        setIsOrder(true);
+        showSuccess('Order Success');
+      }
+    }
   };
 
   return (
@@ -140,6 +217,15 @@ const Product = (props) => {
         inputs={inputs}
         onInputChange={onInputChange}
         onModalClose={onModalClose}
+      />
+      <BuyProductForm
+        isOrder={isOrder}
+        orderData={orderData}
+        isBuyModel={isBuyModel}
+        onPaySubmit={onPaySubmit}
+        onBuyModalClose={onBuyModalClose}
+        purchaseInput={purchaseInput}
+        setPurchaseInput={setPurchaseInput}
       />
     </>
   );

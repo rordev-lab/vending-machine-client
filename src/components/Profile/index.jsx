@@ -6,7 +6,7 @@ import {
   deleteAccount,
   updateProfile,
   updateDeposits,
-} from '../../Services';
+} from '../../services';
 import { profileValidationFunc } from '../../utils/formValidator';
 import { confirmBox, showError, showSuccess } from '../../utils/toast';
 import ProfileForm from './Profile';
@@ -28,22 +28,22 @@ const Profile = (props) => {
   // states
   const [inputs, setInputs] = useState(initialStates);
   const [isEdit, setIsEdit] = useState(false);
-
   const [isDepositEdit, setIsDepositEdit] = useState(false);
-
   const [coinInputs, setCoinInputs] = useState(coinsInitialStates);
-
+  const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
     getProfileData();
   }, []);
 
   // function to fetch profile data
   const getProfileData = async () => {
+    setIsLoading(true);
     const result = await fetchProfile();
     setInputs({
       email: result.email,
       username: result.username,
     });
+    setIsLoading(false);
     if (result.deposit && JSON.parse(result.deposit)) {
       const deposit = JSON.parse(result.deposit);
       setCoinInputs(deposit);
@@ -116,7 +116,7 @@ const Profile = (props) => {
   };
 
   // function to reset deposit
-  const onReset = async () => {
+  const onResetDeposit = async () => {
     const { value } = await confirmBox({
       title: 'Are you sure?',
       text: 'Do you want to reset this deposit',
@@ -159,14 +159,15 @@ const Profile = (props) => {
       <ProfileForm
         isEdit={isEdit}
         inputs={inputs}
-        onReset={onReset}
         onSubmit={onSubmit}
+        isLoading={isLoading}
         coinInputs={coinInputs}
         getBalance={getBalance}
         isDepositEdit={isDepositEdit}
         onInputChange={onInputChange}
         onEditProfile={onEditProfile}
         onEditDeposit={onEditDeposit}
+        onResetDeposit={onResetDeposit}
         onDepositSubmit={onDepositSubmit}
         onDeleteAccount={onDeleteAccount}
         onCoinInputChange={onCoinInputChange}

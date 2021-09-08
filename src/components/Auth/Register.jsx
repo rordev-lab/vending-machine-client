@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import registerValidator from '../../utils/registerValidator';
 import { registerValidationFunc } from '../../utils/formValidator';
 import Input from '../Common/Input';
-import { register } from '../../Services';
+import { register } from '../../services';
 import { showError, showSuccess } from '../../utils/toast';
 
 const initialStates = {

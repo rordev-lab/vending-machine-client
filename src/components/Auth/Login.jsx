@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import Input from '../Common/Input';
 import loginValidator from '../../utils/loginValidator';
 import { loginValidationFunc } from '../../utils/formValidator';
-import { login } from '../../Services';
+import { login } from '../../services';
 import { isUserAuthenticated } from '../../utils/auth';
 import { showError, showSuccess } from '../../utils/toast';
 
@@ -47,21 +47,24 @@ const Login = (props) => {
     e.preventDefault();
     const { email, password } = inputs;
     if (!loginValidator(email, password)) return;
-    const { data, headers } = await login(inputs);
-    console.log(data);
-    if (data && !data.data && !data.success) {
-      showError(data.errors[0]);
-    } else {
-      if (data.data) {
-        const { role = '', id = '' } = data.data;
-        showSuccess('Login Successful');
-        localStorage.setItem('role', role);
-        localStorage.setItem('id', id);
-        localStorage.setItem('authToken', headers['access-token']);
-        localStorage.setItem('uid', headers['uid']);
-        localStorage.setItem('client', headers['client']);
-        history.push('/');
+    try {
+      const { data, headers } = await login(inputs);
+      if (data && !data.data && !data.success) {
+        showError(data.errors[0]);
+      } else {
+        if (data.data) {
+          const { role = '', id = '' } = data.data;
+          showSuccess('Login Successful');
+          localStorage.setItem('role', role);
+          localStorage.setItem('id', id);
+          localStorage.setItem('authToken', headers['access-token']);
+          localStorage.setItem('uid', headers['uid']);
+          localStorage.setItem('client', headers['client']);
+          history.push('/');
+        }
       }
+    } catch (error) {
+      console.log('error', error);
     }
   };
 

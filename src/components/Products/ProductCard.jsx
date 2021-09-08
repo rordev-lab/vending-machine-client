@@ -24,7 +24,7 @@ const ProductCard = (props) => {
   if (isSellerUser()) {
     footer = (
       <div className='card-footer'>
-        <small className='text-muted'> - ${cost} </small>{' '}
+        <small className='text-muted'> ${cost} </small>{' '}
         {parseInt(localStorage.getItem('id')) === seller_id ? (
           <>
             {' '}
@@ -55,7 +55,7 @@ const ProductCard = (props) => {
   } else {
     footer = (
       <div className='card-footer'>
-        <small className='text-muted'> - $ {cost} </small>{' '}
+        <small className='text-muted'> $ {cost} </small>{' '}
         <button
           className='btn btn-primary btn-sm float-right'
           onClick={(e) => onBuyProduct(id, amount_available)}
