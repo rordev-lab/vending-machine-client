@@ -1,8 +1,6 @@
 import React from 'react';
 import { MDBModal, MDBModalBody, MDBModalHeader } from 'mdbreact';
-
 import Input from '../Common/Input';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const BuyProductForm = (props) => {
   const {
@@ -94,5 +92,4 @@ const BuyProductForm = (props) => {
     </MDBModal>
   );
 };
-
 export default BuyProductForm;

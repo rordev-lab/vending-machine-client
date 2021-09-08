@@ -1,12 +1,13 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import Skeleton from 'react-loading-skeleton';
 
 import ProductCard from './ProductCard';
 import { isSellerUser } from '../../utils/auth';
 
 const ProductCardList = (props) => {
-  const { onAddProduct, products } = props;
+  const { onAddProduct, products, isLoading } = props;
   let allProduct = products || [];
   let productCardList = [];
   for (let i = 0; i < allProduct.length; i += 3) {
@@ -34,18 +35,25 @@ const ProductCardList = (props) => {
 
   return (
     <div className='row space-top'>
-      <div className='col-md-12'>
-        <h1 className='jumbotron-heading text-center'>Products</h1>
-        {isSellerUser() ? (
-          <button
-            className='btn btn-info btn-sm float-right'
-            onClick={(e) => onAddProduct()}
-          >
-            <FontAwesomeIcon icon={faPlus} /> Add Product
-          </button>
-        ) : null}
-      </div>
-      {productCardList}
+      {isLoading ? (
+        <Skeleton count={5} />
+      ) : (
+        <>
+          {' '}
+          <div className='col-md-12'>
+            <h1 className='jumbotron-heading text-center'>Products</h1>
+            {isSellerUser() ? (
+              <button
+                className='btn btn-info btn-sm float-right'
+                onClick={(e) => onAddProduct()}
+              >
+                <FontAwesomeIcon icon={faPlus} /> Add Product
+              </button>
+            ) : null}
+          </div>
+          {productCardList}
+        </>
+      )}
     </div>
   );
 };

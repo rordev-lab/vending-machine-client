@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-
 import registerValidator from '../../utils/registerValidator';
 import { registerValidationFunc } from '../../utils/formValidator';
 import Input from '../Common/Input';
@@ -18,12 +17,9 @@ const Register = (props) => {
   const { history } = props;
   // States
   const [inputs, setInputs] = useState(initialStates);
-  /*
-  -----------------------------------
-    Function to manage input states
-  ----------------------------------
-  */
-  const onChange = (e) => {
+
+  //  Function to manage input states
+  const onInputChange = (e) => {
     const {
       target: { name, value },
     } = e;
@@ -33,11 +29,7 @@ const Register = (props) => {
     });
   };
 
-  /*
-  -----------------------------------
-    Function to manage select option 
-  ----------------------------------
-  */
+  // Function to manage select option
   const onSelected = (event) => {
     const { value } = event.target;
     setInputs({
@@ -46,11 +38,7 @@ const Register = (props) => {
     });
   };
 
-  /*
-  -----------------------------------
-    Function to manage registration
-  ----------------------------------
-  */
+  // Function to manage registration
   const onSubmit = async (e) => {
     e.preventDefault();
     const { username, email, password, confirmPassword, role } = inputs;
@@ -63,7 +51,6 @@ const Register = (props) => {
       password_confirmation: confirmPassword,
       role,
     };
-
     const result = await register(data);
     if (result.status === 'success') {
       showSuccess('Registration Successful');
@@ -100,7 +87,7 @@ const Register = (props) => {
               label='Username'
               placeholder='Enter username'
               value={username}
-              onChange={onChange}
+              onChange={onInputChange}
               valid={validObj.validUsername}
             />
             <Input
@@ -109,7 +96,7 @@ const Register = (props) => {
               label='E-mail'
               placeholder='Enter e-mail'
               value={email}
-              onChange={onChange}
+              onChange={onInputChange}
               valid={validObj.validEmail}
             />
             <Input
@@ -118,7 +105,7 @@ const Register = (props) => {
               label='Password'
               placeholder='Enter password'
               value={password}
-              onChange={onChange}
+              onChange={onInputChange}
               valid={validObj.validPassword}
             />
             <Input
@@ -127,7 +114,7 @@ const Register = (props) => {
               label='Confirm Password'
               placeholder='Enter your password again'
               value={confirmPassword}
-              onChange={onChange}
+              onChange={onInputChange}
               valid={validObj.validConfirmPassword}
             />{' '}
             <div className='form-group'>

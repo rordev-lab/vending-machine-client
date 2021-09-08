@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-
 import {
   fetchProfile,
   resetDeposits,
@@ -31,6 +30,7 @@ const Profile = (props) => {
   const [isDepositEdit, setIsDepositEdit] = useState(false);
   const [coinInputs, setCoinInputs] = useState(coinsInitialStates);
   const [isLoading, setIsLoading] = useState(true);
+
   useEffect(() => {
     getProfileData();
   }, []);
@@ -44,8 +44,10 @@ const Profile = (props) => {
       username: result.username,
     });
     setIsLoading(false);
-    if (result.deposit && JSON.parse(result.deposit)) {
-      const deposit = JSON.parse(result.deposit);
+    if (result.deposit) {
+      const deposit = result.deposit
+        ? result.deposit
+        : JSON.parse(result.deposit);
       setCoinInputs(deposit);
     }
   };

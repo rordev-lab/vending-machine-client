@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-
 import {
   addProduct,
   fetchProducts,
@@ -34,23 +33,27 @@ const orderDataInitialStates = {
 };
 const Product = (props) => {
   // States
-  const [isShowModel, setIsShowModel] = useState(false);
-  const [isBuyModel, setIsBuyModel] = useState(false);
-  const [inputs, setInputs] = useState(initialStates);
   const [products, setProducts] = useState([]);
+  const [isOrder, setIsOrder] = useState(false);
+  const [orderData, setOrderData] = useState({});
+  const [isLoading, setIsLoading] = useState(true);
+  const [inputs, setInputs] = useState(initialStates);
+  const [isBuyModel, setIsBuyModel] = useState(false);
+  const [isShowModel, setIsShowModel] = useState(false);
   const [purchaseInput, setPurchaseInput] = useState(
     purchaseInputInitialStates
   );
-  const [isOrder, setIsOrder] = useState(false);
-  const [orderData, setOrderData] = useState({});
+
   useEffect(() => {
     getProducts();
   }, []);
 
   // Function to get products
   const getProducts = async () => {
+    setIsLoading(true);
     const result = await fetchProducts();
     setProducts(result);
+    setIsLoading(false);
   };
 
   // Function to add product modal toggle
@@ -149,11 +152,12 @@ const Product = (props) => {
   };
 
   // function to close buy modal
-  const onBuyModalClose = (e) => {
+  const onBuyModalClose = async (e) => {
     setPurchaseInput(purchaseInputInitialStates);
     setIsBuyModel(false);
     setIsOrder(false);
     setOrderData(orderDataInitialStates);
+    await getProducts();
   };
 
   // function to get balance
@@ -206,25 +210,26 @@ const Product = (props) => {
       <ProductCardList
         {...props}
         products={products}
+        isLoading={isLoading}
         onAddProduct={onAddProduct}
         onBuyProduct={onBuyProduct}
         onEditProduct={onEditProduct}
         onDeleteProduct={onDeleteProduct}
       />
       <AddEditProductForm
-        isShowModel={isShowModel}
-        onSubmit={onSubmit}
         inputs={inputs}
-        onInputChange={onInputChange}
+        onSubmit={onSubmit}
+        isShowModel={isShowModel}
         onModalClose={onModalClose}
+        onInputChange={onInputChange}
       />
       <BuyProductForm
         isOrder={isOrder}
         orderData={orderData}
         isBuyModel={isBuyModel}
         onPaySubmit={onPaySubmit}
-        onBuyModalClose={onBuyModalClose}
         purchaseInput={purchaseInput}
+        onBuyModalClose={onBuyModalClose}
         setPurchaseInput={setPurchaseInput}
       />
     </>

@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-
 import Input from '../Common/Input';
 import loginValidator from '../../utils/loginValidator';
 import { loginValidationFunc } from '../../utils/formValidator';
@@ -23,12 +22,8 @@ const Login = (props) => {
     } // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  /*
-  -----------------------------------
-    Function to manage input states
-  ----------------------------------
-  */
-  const onChange = (e) => {
+  //  Function to manage input states
+  const onInputChange = (e) => {
     const {
       target: { name, value },
     } = e;
@@ -38,11 +33,7 @@ const Login = (props) => {
     });
   };
 
-  /*
-  -------------------------
-    Function to mange login
-  -------------------------
-  */
+  //  Function to mange login
   const onSubmit = async (e) => {
     e.preventDefault();
     const { email, password } = inputs;
@@ -86,7 +77,7 @@ const Login = (props) => {
               label='email'
               placeholder='Enter email'
               value={email}
-              onChange={onChange}
+              onChange={onInputChange}
               valid={validObj.validEmail}
             />
             <Input
@@ -95,7 +86,7 @@ const Login = (props) => {
               label='Password'
               placeholder='Enter password'
               value={password}
-              onChange={onChange}
+              onChange={onInputChange}
               valid={validObj.validPassword}
             />
             <input

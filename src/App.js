@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { Route, Switch, withRouter } from 'react-router-dom';
-
 import PrivateRoute from './routes/PrivateRoute';
 import { isUserAuthenticated } from './utils/auth';
 import {

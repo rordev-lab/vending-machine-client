@@ -1,6 +1,5 @@
 import React from 'react';
 import { MDBModal, MDBModalBody, MDBModalHeader } from 'mdbreact';
-
 import { productValidationFunc } from '../../utils/formValidator';
 import Input from '../Common/Input';
 
